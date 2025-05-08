@@ -88,4 +88,24 @@ class Iot extends BaseController
 
         sukses_js("Sukses", ($q['value'] == "off" ? 0 : 1));
     }
+    public function ble_distance()
+    {
+        $data = clear($this->request->getVar('data'));
+        $db = db('iot');
+
+        $q = $db->where('kategori', "Lampu")->get()->getRowArray();
+
+        if (!$q) {
+            gagal_js("Data not found...");
+        }
+
+        $q['value'] = $data;
+        $db->where('id', $q['id']);
+
+        if ($db->update($q)) {
+            sukses_js("Sukses", ($q['value'] == "off" ? 0 : 1));
+        } else {
+            gagal_js("Gagal...");
+        }
+    }
 }
