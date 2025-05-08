@@ -108,4 +108,24 @@ class Iot extends BaseController
             gagal_js("Gagal...");
         }
     }
+    public function ble_click()
+    {
+        $data = clear($this->request->getVar('data'));
+        $db = db('iot');
+
+        $q = $db->where('kategori', "Lampu")->get()->getRowArray();
+
+        if (!$q) {
+            gagal_js("Data not found...");
+        }
+
+        $q['value'] = ($q['value'] == "on" ? "off" : "on");
+        $db->where('id', $q['id']);
+
+        if ($db->update($q)) {
+            sukses_js("Sukses", $data);
+        } else {
+            gagal_js("Gagal...");
+        }
+    }
 }

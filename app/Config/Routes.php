@@ -68,3 +68,4 @@ $routes->get('/iot/laser', 'Iot::laser');
 
 $routes->post('/api/lighting', 'Iot::lighting');
 $routes->post('/api/ble_distance', 'Iot::ble_distance');
+$routes->post('/api/ble_click', 'Iot::ble_click');
