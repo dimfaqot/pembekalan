@@ -51,7 +51,7 @@ function gagal_js($pesan)
 {
     $data = [
         'status' => '400',
-        'message' => "Gagal!. " . $pesan
+        'message' => $pesan
     ];
 
     echo json_encode($data);

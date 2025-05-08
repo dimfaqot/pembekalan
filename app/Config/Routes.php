@@ -55,3 +55,15 @@ $routes->get('/instagram/logout', 'Instagram::logout');
 $routes->post('/instagram/update_durations', 'Instagram::update_durations');
 $routes->post('/instagram/cari_db', 'Instagram::cari_db');
 $routes->post('/instagram/detail_waktu_menonton', 'Instagram::detail_waktu_menonton');
+
+// instagram
+$routes->get('/iot', 'Iot::index');
+$routes->get('/iot/lampu', 'Iot::lampu');
+$routes->post('/iot/kondisi', 'Iot::kondisi');
+$routes->post('/iot/saklar_lampu', 'Iot::saklar_lampu');
+$routes->post('/iot/durasi_lampu', 'Iot::durasi_lampu');
+$routes->get('/iot/rfid', 'Iot::rfid');
+$routes->get('/iot/remote', 'Iot::remote');
+$routes->get('/iot/laser', 'Iot::laser');
+
+$routes->post('/api/lighting', 'Iot::lighting');
