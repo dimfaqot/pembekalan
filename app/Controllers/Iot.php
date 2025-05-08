@@ -103,7 +103,7 @@ class Iot extends BaseController
         $db->where('id', $q['id']);
 
         if ($db->update($q)) {
-            sukses_js("Sukses", ($q['value'] == "off" ? 0 : 1));
+            sukses_js("Sukses", $data);
         } else {
             gagal_js("Gagal...");
         }
