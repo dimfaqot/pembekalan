@@ -86,6 +86,6 @@ class Iot extends BaseController
             gagal_js("Data not found...");
         }
 
-        sukses_js("Sukses", $q['value']);
+        sukses_js("Sukses", ($q['value'] == "off" ? 0 : 1));
     }
 }
