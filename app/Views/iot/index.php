@@ -62,12 +62,14 @@
                     clearInterval(waiting_tap); // hentikan animasi
                     clearInterval(tap); // hentikan polling
                     message(res.status, res.message);
-                    let html = `
-                    <div class="text-success my-3" style="font-size:18px"><i class="fa-solid fa-circle-check"></i> SUKSES</div>
-                    <div class="rounded p-2 border">UID: <b>${res.data}</b></div>
-                    <a href="" class="btn btn-sm btn-danger mt-3"><i class="fa-solid fa-arrows-rotate"></i> RELOAD</a>
-                    `;
-                    $(".top_body").html(html);
+                    if (res.status == "200") {
+                        let html = `
+                        <div class="text-success my-3" style="font-size:18px"><i class="fa-solid fa-circle-check"></i> SUKSES</div>
+                        <div class="rounded p-2 border">UID: <b>${res.data}</b></div>
+                        <a href="" class="btn btn-sm btn-danger mt-3"><i class="fa-solid fa-arrows-rotate"></i> RELOAD</a>
+                        `;
+                        $(".top_body").html(html);
+                    }
                 }
             }).catch(err => {
                 console.error("Error:", err);
