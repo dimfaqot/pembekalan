@@ -186,7 +186,11 @@ class Iot extends BaseController
         $uid = db('penjudi')->where('id', $id)->get()->getRowArray();
 
         if (!$uid) {
-            sukses_js("Ok", "Nama tidak ditemukan!.");
+            gagal_js("Data not found!.");
+        }
+
+        if ($uid['uid'] !== "") {
+            gagal_js("Uid existed!");
         }
 
         $uid['is_tap'] = 1;

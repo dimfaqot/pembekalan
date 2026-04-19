@@ -61,7 +61,7 @@
                 if (res.data !== "") {
                     clearInterval(waiting_tap); // hentikan animasi
                     clearInterval(tap); // hentikan polling
-
+                    message(res.status, res.message);
                     let html = `
                     <div class="text-success my-3" style="font-size:18px"><i class="fa-solid fa-circle-check"></i> SUKSES</div>
                     <div class="rounded p-2 border">UID: <b>${res.data}</b></div>
