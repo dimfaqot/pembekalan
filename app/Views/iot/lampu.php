@@ -105,7 +105,7 @@
             } else {
                 $(".fa-lightbulb").removeClass("text-warning");
             }
-            $(".msg").text(res.msg);
+            $(".msg").text(res.data.msg);
         }).catch(err => {
             console.error("Error:", err);
         });
