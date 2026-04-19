@@ -6,22 +6,24 @@
 
 <div class="d-flex justify-content-center mt-3">
     <div class="form-check form-switch">
-        <input class="form-check-input btn_saklar" type="checkbox" role="switch">
+        <input class="form-check-input btn_saklar" type="checkbox" <?= ($data['value'] == "on" ? "checked" : ""); ?> role="switch">
     </div>
 </div>
 
 <div class="text-center mt-3">
     <h2 class="mb-3">Durasi countdown:</h2>
-    <input type="number" id="countdownInput" class="form-control w-25 mx-auto mb-3" min="1" value="10">
+    <input type="number" id="countdownInput" class="form-control w-25 mx-auto mb-3" min="1" value="<?= $data['durasi']; ?>">
     <button id="startButton" class="btn btn-primary">Mulai Countdown</button>
 
     <div class="d-flex justify-content-center">
         <div class="d-flex justify-content-center align-items-center rounded-circle border border-primary mt-3"
             style="width: 100px; height: 100px;">
-            <span id="countdownDisplay" class="fs-2 fw-bold">10</span>
+            <span id="countdownDisplay" class="fs-2 fw-bold"><?= $data['durasi']; ?></span>
         </div>
     </div>
 </div>
+
+<div class="text-center text-success mt-5 msg"></div>
 
 
 
@@ -44,13 +46,14 @@
             }
         })
     }
-    setInterval(() => {
-        kondisi();
-    }, 1000);
+    // setInterval(() => {
+    //     kondisi();
+    // }, 1000);
 
     $(document).on("change", ".btn_saklar", function(e) {
         e.preventDefault();
         let check = $(this).is(":checked");
+
         post('iot/saklar_lampu', {
             kategori: "<?= $judul; ?>",
             check
@@ -60,9 +63,12 @@
     })
 
 
+
+
     $(document).ready(function() {
         $("#startButton").click(function() {
             let count = parseInt($("#countdownInput").val());
+
             post('iot/durasi_lampu', {
                 kategori: "<?= $judul; ?>",
                 durasi: count
@@ -91,5 +97,26 @@
 
         });
     });
+
+    setInterval(() => {
+        post('iot/is_light_on').then(res => {
+            if (res.status == "200" && res.data.value == "on") {
+                $(".fa-lightbulb").addClass("text-warning");
+            } else {
+                $(".fa-lightbulb").removeClass("text-warning");
+            }
+            $(".msg").text(res.msg);
+        }).catch(err => {
+            console.error("Error:", err);
+        });
+    }, 1000);
+
+    // setInterval(() => {
+    //     post('api/lighting').then(res => {
+    //         console.log(res);
+    //     }).catch(err => {
+    //         console.error("Error:", err);
+    //     });
+    // }, 1000);
 </script>
 <?= $this->endSection() ?>

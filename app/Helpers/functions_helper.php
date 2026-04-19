@@ -1,5 +1,8 @@
 <?php
 
+// use Firebase\JWT\JWT;
+// use Firebase\JWT\Key;
+
 function db($tabel, $db = null)
 {
     if ($db == null || $db == 'pembekalan') {
@@ -376,3 +379,30 @@ function get_profile()
     }
     return $link . user()['img'];
 }
+
+// function encode_jwt($data)
+// {
+
+//     $jwt = JWT::encode($data, getenv("KEY_JWT"), 'HS256');
+
+//     return $jwt;
+// }
+
+// function decode_jwt($encode_jwt)
+// {
+//     try {
+
+//         $decoded = JWT::decode($encode_jwt, new Key(getenv("KEY_JWT"), 'HS256'));
+//         $arr = (array)$decoded;
+
+//         return $arr;
+//     } catch (\Exception $e) {
+//         $data = [
+//             'status' => '400',
+//             'message' => $e->getMessage()
+//         ];
+
+//         echo json_encode($data);
+//         die;
+//     }
+// }

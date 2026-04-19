@@ -6,13 +6,12 @@ class Iot extends BaseController
 {
     public function index(): string
     {
-
         return view('iot/index', ['judul' => 'Iot']);
     }
     public function lampu(): string
     {
-
-        return view('iot/lampu', ['judul' => 'Lampu']);
+        $data = db('iot')->get()->getRowArray();
+        return view('iot/lampu', ['judul' => 'Lampu', 'data' => $data]);
     }
     public function kondisi(): string
     {
@@ -41,6 +40,7 @@ class Iot extends BaseController
         }
 
         $q['value'] = ($q['value'] == "on" ? "off" : "on");
+        $q['msg'] = "Lampu dikontrol dari web";
         $db->where('id', $q['id']);
 
         if ($db->update($q)) {
@@ -76,8 +76,15 @@ class Iot extends BaseController
             gagal_js("Gagal...");
         }
     }
+    // kode: 1= daftar rfid, 0= menyalakan atau mematikan lampu
     public function lighting()
     {
+        // 1. check apakak sedang daftar rfid dari status penjudi
+
+        $user = db('penjudi')->where('is_tap', 1)->get()->getRowArray();
+        $kode = ($user ? 1 : 0);
+
+        // 2. check status iot on atau off
         $db = db('iot');
 
         $q = $db->where('kategori', "Lampu")->get()->getRowArray();
@@ -86,7 +93,14 @@ class Iot extends BaseController
             gagal_js("Data not found...");
         }
 
-        sukses_js("Sukses", ($q['value'] == "off" ? 0 : 1));
+        sukses_js("Sukses", $kode, ($q['value'] == "off" ? 0 : 1));
+    }
+    public function is_light_on()
+    {
+
+        $iot = db('iot')->get()->getRowArray();
+
+        sukses_js("Ok", $iot);
     }
     public function ble_distance()
     {
@@ -127,5 +141,28 @@ class Iot extends BaseController
         } else {
             gagal_js("Gagal...");
         }
+    }
+
+    public function user()
+    {
+        $users = db('penjudi')->orderBy('nama', 'ASC')->get()->getResultArray();
+
+        sukses_js("Ok", $users);
+    }
+    public function rfid()
+    {
+        $id = clear($this->request->getVar('id'));
+        $uid = db('penjudi')->where('id', $id)->get()->getRowArray();
+
+        if (!$uid) {
+            sukses_js("Ok", "Nama tidak ditemukan!.");
+        }
+
+        if ($uid['is_tap'] == 0) {
+            $uid['is_tap'] = 1;
+            db('penjudi')->where('id', $id)->update($uid);
+        }
+
+        sukses_js("Ok", $uid['uid']);
     }
 }

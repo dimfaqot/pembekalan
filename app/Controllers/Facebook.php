@@ -213,7 +213,8 @@ class Facebook extends BaseController
             'nama' => $nama,
             'role' => 'Member',
             'img' => 'images.jpg',
-            'password' => password_hash($password, PASSWORD_DEFAULT)
+            'password' => password_hash($password, PASSWORD_DEFAULT),
+            'uid' => time()
         ];
 
         if ($db->insert($data)) {
