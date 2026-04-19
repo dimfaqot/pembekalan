@@ -183,18 +183,25 @@ class Iot extends BaseController
     public function rfid()
     {
         $id = clear($this->request->getVar('id'));
+        $order = clear($this->request->getVar('order'));
         $uid = db('penjudi')->where('id', $id)->get()->getRowArray();
 
-        if (!$uid) {
-            gagal_js("Data not found!.");
+
+        if ($order == "daftar") {
+            if (!$uid) {
+                gagal_js("Data not found!.");
+            }
+
+            if ($uid['uid'] !== "") {
+                gagal_js("Uid existed.");
+            }
+
+            $uid['is_tap'] = 1;
+            if (db('penjudi')->where('id', $id)->update($uid)) {
+                sukses_js("Silahkan tap...");
+            }
         }
 
-        if ($uid['uid'] !== "") {
-            gagal_js("Uid existed!");
-        }
-
-        $uid['is_tap'] = 1;
-        db('penjudi')->where('id', $id)->update($uid);
 
 
         sukses_js("Ok", $uid['uid']);

@@ -56,21 +56,19 @@
         // interval untuk cek API
         let tap = setInterval(function() {
             post('iot/rfid', {
-                id
+                id,
+                order: ""
             }).then(res => {
                 if (res.data !== "") {
                     clearInterval(waiting_tap); // hentikan animasi
                     clearInterval(tap); // hentikan polling
                     message(res.status, res.message);
-                    if (res.status == "200") {
+                    if (res.data !== "") {
                         let html = `
                         <div class="text-success my-3" style="font-size:18px"><i class="fa-solid fa-circle-check"></i> SUKSES</div>
                         <div class="rounded p-2 border">UID: <b>${res.data}</b></div>
                         <a href="" class="btn btn-sm btn-danger mt-3"><i class="fa-solid fa-arrows-rotate"></i> RELOAD</a>
                         `;
-                        $(".top_body").html(html);
-                    } else {
-                        let html = `<div class="rounded p-2 border">UID: <b class="text-danger">${res.message}</b></div>`;
                         $(".top_body").html(html);
                     }
                 }
@@ -86,13 +84,33 @@
         modal.hide();
         let id = $(this).data('id');
         let nama = $(this).data('nama');
-        let html = `
-        <div class="rounded p-2 border my-3">${nama}</div>
-        <div class="text-danger">Silahkan tap <span class="dots"></span></div>`;
 
-        $(".top_body").html(html);
+        post('iot/rfid', {
+            id,
+            order: "daftar"
+        }).then(res => {
+            message(res.status, res.message);
 
-        tap_interval(id, );
+            if (res.status == "200") {
+                let html = `
+                    <div class="rounded p-2 border my-3">${nama}</div>
+                    <div class="text-danger">Silahkan tap <span class="dots"></span></div>`;
+
+                $(".top_body").html(html);
+
+                tap_interval(id);
+
+            } else {
+                let html = `<div class="rounded p-2 border">UID: <b class="text-danger">${res.message}</b></div>`;
+                $(".top_body").html(html);
+            }
+
+        }).catch(err => {
+            console.error("Error:", err);
+
+        });
+
+
     });
 </script>
 <?= $this->endSection() ?>
