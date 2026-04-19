@@ -93,6 +93,7 @@ class Iot extends BaseController
         if ($user) {
             // masukkan uid ke user
             $user['uid'] = $uid;
+            $user['is_tap'] = 0;
             if (! db('penjudi')->where('id', $user['id'])->update($user)) {
                 // jika daftar rfid gagal
                 $q['msg'] = "Registration failed!";
@@ -188,10 +189,9 @@ class Iot extends BaseController
             sukses_js("Ok", "Nama tidak ditemukan!.");
         }
 
-        if ($uid['is_tap'] == 0) {
-            $uid['is_tap'] = 1;
-            db('penjudi')->where('id', $id)->update($uid);
-        }
+        $uid['is_tap'] = 1;
+        db('penjudi')->where('id', $id)->update($uid);
+
 
         sukses_js("Ok", $uid['uid']);
     }
