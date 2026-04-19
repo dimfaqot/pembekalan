@@ -85,11 +85,7 @@
                             kategori: "<?= $judul; ?>"
                         }).then(res => {
                             message(res.status, res.message);
-                            if (res.status == "200") {
-                                $(".btn_saklar").prop("checked", true);
-                            } else {
-                                $(".btn_saklar").prop("checked", false);
-                            }
+
                         })
                     }
                 }, 1000);
@@ -102,8 +98,10 @@
         post('iot/is_light_on').then(res => {
             if (res.data.value == "on") {
                 $(".fa-lightbulb").addClass("text-warning");
+                $(".btn_saklar").prop("checked", true);
             } else {
                 $(".fa-lightbulb").removeClass("text-warning");
+                $(".btn_saklar").prop("checked", false);
             }
             $(".msg").text(res.data.msg);
         }).catch(err => {
