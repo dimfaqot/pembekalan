@@ -69,6 +69,9 @@
                         <a href="" class="btn btn-sm btn-danger mt-3"><i class="fa-solid fa-arrows-rotate"></i> RELOAD</a>
                         `;
                         $(".top_body").html(html);
+                    } else {
+                        let html = `<div class="rounded p-2 border">UID: <b class="text-danger">${res.message}</b></div>`;
+                        $(".top_body").html(html);
                     }
                 }
             }).catch(err => {
@@ -88,7 +91,8 @@
         <div class="text-danger">Silahkan tap <span class="dots"></span></div>`;
 
         $(".top_body").html(html);
-        tap_interval(id);
+
+        tap_interval(id, );
     });
 </script>
 <?= $this->endSection() ?>
