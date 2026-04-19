@@ -100,7 +100,7 @@
 
     setInterval(() => {
         post('iot/is_light_on').then(res => {
-            if (res.status == "200" && res.data.value == "on") {
+            if (res.data.value == "on") {
                 $(".fa-lightbulb").addClass("text-warning");
             } else {
                 $(".fa-lightbulb").removeClass("text-warning");

@@ -79,21 +79,51 @@ class Iot extends BaseController
     // kode: 1= daftar rfid, 0= menyalakan atau mematikan lampu
     public function lighting()
     {
-        // 1. check apakak sedang daftar rfid dari status penjudi
 
+        $uid = $this->request->getVar('data'); // dari esp
+
+        // cek apakah sedang mendaftarkan rfid
         $user = db('penjudi')->where('is_tap', 1)->get()->getRowArray();
-        $kode = ($user ? 1 : 0);
 
-        // 2. check status iot on atau off
+        // data iot di db
         $db = db('iot');
-
         $q = $db->where('kategori', "Lampu")->get()->getRowArray();
 
-        if (!$q) {
-            gagal_js("Data not found...");
+        // jika sedang ada yang mendaftar rfid
+        if ($user) {
+            // masukkan uid ke user
+            $user['uid'] = $uid;
+            if (! db('penjudi')->where('id', $user['id'])->update($user)) {
+                // jika daftar rfid gagal
+                $q['msg'] = "Registration failed!";
+                $db->where('id', $q['id'])->update($q);
+                gagal_js("Registration failed!");
+            }
+
+            // jika daftar rfid berhasil
+            $q['msg'] = "Card registered";
+            $db->where('id', $q['id'])->update($q);
+            sukses_js("Card registered");
         }
 
-        sukses_js("Sukses", $kode, ($q['value'] == "off" ? 0 : 1));
+        // jika tidak sedang ada yang mendaftar rfid berarti menyalakan/mematikan lampu
+        // Apakah rfid terdaftar
+        $operator_iot = db('penjudi')->where('uid', $uid)->get()->getRowArray();
+
+        // Jika tidak terdaftar
+        if (!$operator_iot) {
+            $q['msg'] = "Unregistered card";
+            $db->where('id', $q['id'])->update($q);
+            gagal_js("Unregistered card");
+        }
+
+        // Jika terdaftar maka nyalakan lampu
+        $msg = "Light turned " . ($q['value'] == "off" ? "on" : "off") . " by " . $operator_iot['nama'];
+
+        $q['msg'] = $msg;
+        $q['value'] = ($q['value'] == "off" ? "on" : "off");
+        $db->where('id', $q['id'])->update($q);
+        sukses_js($msg);
     }
     public function is_light_on()
     {
