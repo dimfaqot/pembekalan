@@ -107,24 +107,30 @@ class Iot extends BaseController
             sukses_js("Card registered");
         }
 
-        // jika tidak sedang ada yang mendaftar rfid berarti menyalakan/mematikan lampu
-        // Apakah rfid terdaftar
-        $operator_iot = db('penjudi')->where('uid', $uid)->get()->getRowArray();
+        if ($uid !== "") {
+            // jika tidak sedang ada yang mendaftar rfid dan uid tidak kososng berarti menyalakan/mematikan lampu
+            // Apakah rfid terdaftar
+            $operator_iot = db('penjudi')->where('uid', $uid)->get()->getRowArray();
 
-        // Jika tidak terdaftar
-        if (!$operator_iot) {
-            $q['msg'] = "Unregistered card";
+            // Jika tidak terdaftar
+            if (!$operator_iot) {
+                $q['msg'] = "Unregistered card";
+                $db->where('id', $q['id'])->update($q);
+                gagal_js("Unregistered card");
+            }
+
+            // Jika terdaftar maka nyalakan lampu
+            $msg = "Light turned " . ($q['value'] == "off" ? "on" : "off") . " by " . $operator_iot['nama'];
+
+            $q['msg'] = $msg;
+            $q['value'] = ($q['value'] == "off" ? "on" : "off");
             $db->where('id', $q['id'])->update($q);
-            gagal_js("Unregistered card");
+            $kode = ($q['value'] == "on" ? 1 : 0);
+        } else {
+            // jika tidak ada yang mendaftar rfid dan uid kosong maka hanya check status lampu saja
+            $msg = "Check";
         }
 
-        // Jika terdaftar maka nyalakan lampu
-        $msg = "Light turned " . ($q['value'] == "off" ? "on" : "off") . " by " . $operator_iot['nama'];
-
-        $q['msg'] = $msg;
-        $q['value'] = ($q['value'] == "off" ? "on" : "off");
-        $db->where('id', $q['id'])->update($q);
-        $kode = ($q['value'] == "on" ? 1 : 0);
         sukses_js($msg, $kode);
     }
     public function is_light_on()
