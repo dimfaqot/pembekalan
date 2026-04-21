@@ -51,13 +51,13 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link <?= $judul == "Lampu" ? "active" : ""; ?>" href="<?= base_url('iot/lampu'); ?>">Lampu</a>
+                            <a class="nav-link <?= $judul == "Daftar" ? "active" : ""; ?>" href="<?= base_url('iot'); ?>">Daftar</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link <?= $judul == "Rfid" ? "active" : ""; ?>" href="<?= base_url('iot/rfid'); ?>">Rfid</a>
+                            <a class="nav-link <?= $judul == "Rfid" ? "active" : ""; ?>" href="<?= base_url('iot/lampu'); ?>">Lampu</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link <?= $judul == "Remote" ? "active" : ""; ?>" href="<?= base_url('iot/remote'); ?>">Remote</a>
+                            <a class="nav-link <?= $judul == "Kantin" ? "active" : ""; ?>" href="<?= base_url('iot/kantin'); ?>">Kantin</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link <?= $judul == "Laser" ? "active" : ""; ?>" href="<?= base_url('iot/laser'); ?>">Laser</a>

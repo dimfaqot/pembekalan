@@ -62,7 +62,7 @@ $routes->get('/iot/lampu', 'Iot::lampu');
 $routes->post('/iot/kondisi', 'Iot::kondisi');
 $routes->post('/iot/saklar_lampu', 'Iot::saklar_lampu');
 $routes->post('/iot/durasi_lampu', 'Iot::durasi_lampu');
-$routes->get('/iot/remote', 'Iot::remote');
+$routes->get('/iot/kantin', 'Iot::Kantin');
 $routes->get('/iot/laser', 'Iot::laser');
 $routes->post('/iot/user', 'Iot::user');
 $routes->post('/iot/rfid', 'Iot::rfid');

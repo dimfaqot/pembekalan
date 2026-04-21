@@ -79,7 +79,7 @@ class Iot extends BaseController
     // kode: 1= daftar rfid, 0= menyalakan atau mematikan lampu
     public function lighting()
     {
-
+        $kode = 0;
         $uid = $this->request->getVar('data'); // dari esp
 
         // cek apakah sedang mendaftarkan rfid
@@ -124,7 +124,7 @@ class Iot extends BaseController
         $q['msg'] = $msg;
         $q['value'] = ($q['value'] == "off" ? "on" : "off");
         $db->where('id', $q['id'])->update($q);
-        sukses_js($msg);
+        sukses_js($msg, $q['value']);
     }
     public function is_light_on()
     {
@@ -205,5 +205,9 @@ class Iot extends BaseController
 
 
         sukses_js("Ok", $uid['uid']);
+    }
+    public function kantin()
+    {
+        return view('iot/kantin', ['judul' => 'Kantin']);
     }
 }
