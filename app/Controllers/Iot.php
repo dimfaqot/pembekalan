@@ -124,7 +124,8 @@ class Iot extends BaseController
         $q['msg'] = $msg;
         $q['value'] = ($q['value'] == "off" ? "on" : "off");
         $db->where('id', $q['id'])->update($q);
-        sukses_js($msg, $q['value']);
+        $kode = ($q['value'] == "on" ? 1 : 0);
+        sukses_js($msg, $kode);
     }
     public function is_light_on()
     {
