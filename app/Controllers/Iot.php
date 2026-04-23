@@ -204,7 +204,6 @@ class Iot extends BaseController
             }
 
             $uid['is_tap'] = 1;
-            sukses_js('OK', $uid);
             if (db('penjudi')->where('id', $id)->update($uid)) {
                 sukses_js("Silahkan tap...");
             }
