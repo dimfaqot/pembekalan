@@ -129,6 +129,7 @@ class Iot extends BaseController
         } else {
             // jika tidak ada yang mendaftar rfid dan uid kosong maka hanya check status lampu saja
             $msg = "Check";
+            $kode = $q['value'];
         }
 
         sukses_js($msg, $kode);
