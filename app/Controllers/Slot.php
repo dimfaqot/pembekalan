@@ -81,7 +81,7 @@ class Slot extends BaseController
 
         $jml_taruhan = $this->request->getVar('jml_taruhan');
         if ($jml_taruhan < 50000) {
-            gagal(base_url('slotgacor/home'), 'Taruhan minilam Rp50.000!.');
+            gagal(base_url('slotgacor/home'), 'Taruhan minimal Rp50.000!.');
         }
         if ($jml_taruhan > $q['uang']) {
             gagal(base_url('slotgacor/home'), 'Saldo Anda tidak cukup!.');
