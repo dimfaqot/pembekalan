@@ -90,11 +90,11 @@ class Iot extends BaseController
         $q = $db->where('kategori', "Lampu")->get()->getRowArray();
 
         // jika sedang ada yang mendaftar rfid
-        if ($user) {
+        if ($user && $uid !== "") {
             // masukkan uid ke user
             $user['uid'] = $uid;
             $user['is_tap'] = 0;
-            if (! db('penjudi')->where('id', $user['id'])->update($user)) {
+            if (!db('penjudi')->where('id', $user['id'])->update($user)) {
                 // jika daftar rfid gagal
                 $q['msg'] = "Registration failed!";
                 $db->where('id', $q['id'])->update($q);
