@@ -37,7 +37,7 @@ class Kantin extends BaseController
             if ($user) {
                 $data['uang'] = $user['uang'];
             }
-        } else {
+        } elseif ($data) {
             if ($data['msg'] == "Unregistered card") {
                 $status = 3;
                 $data['status'] = 1;
