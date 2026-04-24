@@ -62,12 +62,15 @@ $routes->get('/iot/lampu', 'Iot::lampu');
 $routes->post('/iot/kondisi', 'Iot::kondisi');
 $routes->post('/iot/saklar_lampu', 'Iot::saklar_lampu');
 $routes->post('/iot/durasi_lampu', 'Iot::durasi_lampu');
-$routes->get('/iot/kantin', 'Iot::Kantin');
 $routes->get('/iot/laser', 'Iot::laser');
 $routes->post('/iot/user', 'Iot::user');
 $routes->post('/iot/rfid', 'Iot::rfid');
 $routes->post('/iot/tap', 'Iot::tap');
 $routes->post('/iot/is_light_on', 'Iot::is_light_on');
+
+$routes->get('iot/kantin', 'Kantin::Kantin');
+$routes->post('kantin/harga', 'Kantin::harga');
+$routes->post('kantin/cek_pembayaran', 'Kantin::cek_pembayaran');
 
 $routes->post('/api/lighting', 'Iot::lighting');
 $routes->post('/api/ble_distance', 'Iot::ble_distance');

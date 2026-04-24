@@ -107,8 +107,45 @@ class Iot extends BaseController
             sukses_js("Card registered");
         }
 
+        // cek apakah sedang ada transaksi kantin
+        $transaksi = db('bayar')->where('status', 0)->where('user_id', 0)->get()->getRowArray();
+
+        if ($transaksi && $uid !== "") {
+            $pembeli = db('penjudi')->where('uid', $uid)->get()->getRowArray();
+
+            if ($pembeli) {
+                $transaksi['user_id'] = $pembeli['nama'];
+                $transaksi['status'] = 1;
+
+                if ($transaksi['biaya'] > $pembeli['uang']) {
+                    $transaksi['msg'] = "Saldo tidak cukup!";
+                    if (!db('bayar')->where('id', $transaksi['id'])->update($transaksi)) {
+                        gagal_js("Saldo tidak cukup!");
+                    }
+                } else {
+                    $transaksi['msg'] = "Transaksi sukses";
+                    if (!db('bayar')->where('id', $transaksi['id'])->update($transaksi)) {
+                        gagal_js("Transaksi gagal!");
+                    }
+
+                    $pembeli['uang'] -= $transaksi['biaya'];
+
+                    if (!db('penjudi')->where('id', $pembeli['id'])->update($pembeli)) {
+                        gagal_js("Update saldo gagal");
+                    }
+
+                    sukses_js("Transaksi berhasil");
+                }
+            } else {
+                $transaksi['msg'] = "Unregistered card";
+                if (!db('bayar')->where('id', $transaksi['id'])->update($transaksi)) {
+                    gagal_js("Unregistered card!");
+                }
+            }
+        }
+
         if ($uid !== "") {
-            // jika tidak sedang ada yang mendaftar rfid dan uid tidak kososng berarti menyalakan/mematikan lampu
+            // jika tidak sedang ada yang mendaftar rfid dan tidak ada pembayaran kantin dan uid tidak kososng berarti menyalakan/mematikan lampu
             // Apakah rfid terdaftar
             $operator_iot = db('penjudi')->where('uid', $uid)->get()->getRowArray();
 
@@ -213,9 +250,5 @@ class Iot extends BaseController
 
 
         sukses_js("Ok", $uid['uid']);
-    }
-    public function kantin()
-    {
-        return view('iot/kantin', ['judul' => 'Kantin']);
     }
 }

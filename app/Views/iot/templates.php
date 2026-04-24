@@ -31,6 +31,44 @@
             });
             return response.json(); // parses JSON response into native JavaScript objects
         }
+
+        function angka(a, prefix) {
+            let angka = a.toString();
+            let number_string = angka.replace(/[^,\d]/g, '').toString(),
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        }
+
+        const time_php_to_js = (date, format = "d/m/Y") => {
+            const d = new Date(date * 1000);
+
+            const map = {
+                d: d.getDate().toString().padStart(2, '0'),
+                m: (d.getMonth() + 1).toString().padStart(2, '0'),
+                Y: d.getFullYear(),
+                H: d.getHours().toString().padStart(2, '0'),
+                i: d.getMinutes().toString().padStart(2, '0'),
+                s: d.getSeconds().toString().padStart(2, '0')
+            };
+
+            let result = '';
+            for (let i = 0; i < format.length; i++) {
+                const char = format[i];
+                result += map[char] ?? char; // kalau bukan placeholder, langsung ditambahkan
+            }
+
+            return result;
+        };
     </script>
 </head>
 
