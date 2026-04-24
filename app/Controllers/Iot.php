@@ -116,7 +116,6 @@ class Iot extends BaseController
             if ($pembeli) {
                 $transaksi['user_id'] = $pembeli['id'];
                 $transaksi['nama'] = $pembeli['nama'];
-                $transaksi['status'] = 1;
 
                 if ($transaksi['biaya'] > $pembeli['uang']) {
                     $transaksi['msg'] = "Saldo tidak cukup!";
