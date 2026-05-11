@@ -27,15 +27,15 @@
 
 </table>
 
-<div class="transaksi mt-4 d-grid"></div>
+<div class="msg_transaksi mt-4 d-grid"></div>
 
 <script>
     let data = [];
     let total = 0;
     const body_transaksi = () => {
+        total = data.reduce((sum, item) => sum + item.harga, 0);
         let html = "";
         data.forEach((e, i) => {
-            total += parseInt(e.harga);
             html += `<tr>
                     <td>${(i+1)}</td>
                     <td>${e.menu}</td>
@@ -49,7 +49,7 @@
                 </tr>`;
 
         $(".body_transaksi").html(html);
-        $(".transaksi").html(`<button class="btn btn-sm btn-primary bayar">BAYAR</button>`);
+        $(".msg_transaksi").html(`<button class="btn btn-sm btn-primary bayar">BAYAR</button>`);
     }
 
     $(document).on('click', '.harga', function(e) {
@@ -57,26 +57,26 @@
         let menu = $(this).data('menu');
         let harga = $(this).data('harga');
 
-        let temp_data = [];
-        temp_data.push({
+        data.push({
             menu,
             harga
         });
 
-        data = temp_data;
-
         body_transaksi();
     });
 
-    $(document).on('click', '.transaksi', function(e) {
+    $(document).on('click', '.bayar', function(e) {
         e.preventDefault();
-        post("kantin/harga", {
-            total
-        }).then(res => {
-            message(res.status, res.message);
-        })
+        if (total > 0) {
+            post("kantin/harga", {
+                total
+            }).then(res => {
+                message(res.status, res.message);
+            })
+
+        }
     });
-    $(document).on('click', '.end', function(e) {
+    $(document).on('click', '.last', function(e) {
         location.reload();
     });
 
@@ -95,27 +95,24 @@
             if (res.data2 !== null) {
 
                 if (res.data == 1) {
-                    $(".transaksi").html(`<div class="text-danger">Silahkan tap <span class="dots"></span></div>`);
+                    $(".msg_transaksi").html(`<div class="text-danger">Silahkan tap <span class="dots"></span></div>`);
                     dot();
+                } else if (res.data == 2) {
+                    $(".msg_transaksi").html(`<div class="text-danger">Unregistered card</div>`);
                 } else {
-                    let html = `
-                    <div>Tgl: ${time_php_to_js(res.data2.tgl)}</div>`;
-                    if (res.data == 2) {
-                        html += `<div>Nama: ${res.data2.nama}</div>
+                    let html = ``;
+                    if (res.data == 3) {
+                        html += `
+                    <div>Tgl: ${time_php_to_js(res.data2.tgl)}</div>
+                    <div>Nama: ${res.data2.nama}</div>
                             <div>${res.data2.msg}</div>
                             <div>Saldo: ${angka(res.data2.uang)}</div>
     
-                            <button class="btn btn-sm btn-danger end">SELESAI</button>
-                        `
-                    }
-                    if (res.data == 3) {
-                        html += `
-                            <div>${res.data2.msg}</div>
-                            <button class="btn btn-sm btn-danger end">SELESAI</button>
+                            <button class="btn btn-sm btn-danger last">SELESAI</button>
                         `
                     }
 
-                    $(".transaksi").html(html);
+                    $(".msg_transaksi").html(html);
                     // hentikan setInterval
                     clearInterval(intervalCekBayar);
 
