@@ -108,7 +108,7 @@ class Iot extends BaseController
         }
 
         // cek apakah sedang ada transaksi kantin
-        $transaksi = db('bayar')->where('status', 0)->where('user_id', 0)->get()->getRowArray();
+        $transaksi = db('bayar')->where('status', 0)->get()->getRowArray();
 
         if ($transaksi && $uid !== "") {
             $pembeli = db('penjudi')->where('uid', $uid)->get()->getRowArray();
