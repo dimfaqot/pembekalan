@@ -80,6 +80,7 @@ class Iot extends BaseController
     public function lighting()
     {
         $kode = 0;
+        $msg = "";
         $uid = $this->request->getVar('data'); // dari esp
 
         // cek apakah sedang mendaftarkan rfid
@@ -124,27 +125,26 @@ class Iot extends BaseController
                     }
                 } else {
                     $transaksi['msg'] = "Transaksi sukses";
-                    if (!db('bayar')->where('id', $transaksi['id'])->update($transaksi)) {
+                    if (db('bayar')->where('id', $transaksi['id'])->update($transaksi)) {
+                        $pembeli['uang'] -= $transaksi['biaya'];
+                        if (db('penjudi')->where('id', $pembeli['id'])->update($pembeli)) {
+                            sukses_js("Transaksi berhasil");
+                        } else {
+                            gagal_js("Update saldo gagal");
+                        }
+                    } else {
                         gagal_js("Transaksi gagal!");
                     }
-
-                    $pembeli['uang'] -= $transaksi['biaya'];
-
-                    if (!db('penjudi')->where('id', $pembeli['id'])->update($pembeli)) {
-                        gagal_js("Update saldo gagal");
-                    }
-
-                    sukses_js("Transaksi berhasil");
                 }
             } else {
                 $transaksi['msg'] = "Unregistered card";
-                if (!db('bayar')->where('id', $transaksi['id'])->update($transaksi)) {
+                if (db('bayar')->where('id', $transaksi['id'])->update($transaksi)) {
+                    gagal_js("Registration success");
+                } else {
                     gagal_js("Unregistered card!");
                 }
             }
-        }
-
-        if ($uid !== "") {
+        } elseif ($uid !== "") {
             // jika tidak sedang ada yang mendaftar rfid dan tidak ada pembayaran kantin dan uid tidak kososng berarti menyalakan/mematikan lampu
             // Apakah rfid terdaftar
             $operator_iot = db('penjudi')->where('uid', $uid)->get()->getRowArray();
