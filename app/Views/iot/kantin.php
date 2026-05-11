@@ -101,7 +101,7 @@
                     $(".msg_transaksi").html(`<div class="text-danger">Unregistered card</div>`);
                 } else {
                     let html = ``;
-                    if (res.data == 3) {
+                    if (res.data == 3 || res.data == 4) {
                         html += `
                     <div>Tgl: ${time_php_to_js(res.data2.tgl)}</div>
                     <div>Nama: ${res.data2.nama}</div>
