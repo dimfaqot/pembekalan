@@ -51,7 +51,7 @@ class Kantin extends BaseController
                     $data['uang'] = $user['uang'];
                     $data['nama'] = $user['nama'];
                 }
-            } elseif ($data['msg'] == "Transaksi berhasil") {
+            } elseif ($data['msg'] == "Transaksi sukses") {
                 $status = 4;
                 $data['status'] = 1;
                 $user = db('penjudi')->where('id', $data['user_id'])->get()->getRowArray();
